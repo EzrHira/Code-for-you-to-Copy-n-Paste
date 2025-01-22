@@ -1,1 +1,1 @@
-All this stuff is NOT COPYRIGHTED, you can do whatever you want with it. This is for all the bro's who are too lazy to actually code but want a sick looking website, or you could use this for a wallpaper i guess too; either way I dont really care so have fun.
+All this stuff is NOT COPYRIGHTED, you can do whatever you want with it. This is for all the bros who are too lazy to actually code but want a sick looking website, or you could use this for a wallpaper i guess too; either way I dont really care so have fun.
