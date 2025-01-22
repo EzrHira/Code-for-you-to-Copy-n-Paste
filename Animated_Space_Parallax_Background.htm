@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Effects</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            position: relative; /* Needed to contain the stars and particles */
+            /* Hide scrollbar */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* Internet Explorer 10+ */
+        }
+        body::-webkit-scrollbar {
+            display: none; /* WebKit browsers */
+        }
+
+        /* Nebula background */
+        #nebula {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 200%; /* Make the image larger than the viewport */
+            height: 200%;
+            background: url('https://img.freepik.com/free-photo/colorful-abstract-universe-textured_53876-95183.jpg?t=st=1737560871~exp=1737564471~hmac=6c56d8187f8acc78a544175059197ccc5537f10b200b4da558159456b7c8fe9d&w=2000') no-repeat center center;
+            background-size: cover;
+            opacity: 0.2; /* Reduced opacity */
+            filter: blur(12px); /* Increased blur effect */
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.5), 0 0 40px rgba(255, 105, 180, 0.5); /* Glow effect */
+            z-index: -3; /* Ensure nebula is behind stars */
+            transition: transform 0.3s ease-out; /* Smooth parallax transition */
+            transform: translate(-50%, -50%); /* Center the image */
+        }
+
+        /* Stars animation */
+        #stars, #shooting-stars, #large-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: transparent;
+            z-index: -2; /* Ensure stars are behind other content */
+            overflow: hidden;
+        }
+        .star, .shooting-star, .large-star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkling 5s infinite;
+            transition: transform 0.3s ease-out; /* Smooth parallax transition */
+        }
+        .star {
+            width: 2px;
+            height: 2px;
+        }
+        .shooting-star {
+            width: 5px; /* Increased width */
+            height: 5px; /* Increased height */
+            animation: shooting 8s infinite; /* Slower animation */
+            opacity: 0;
+        }
+        .shooting-star::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: white;
+            transform: rotate(45deg);
+            transform-origin: left;
+            opacity: 0.5;
+            animation: trail 8s infinite; /* Slower animation */
+        }
+        .large-star {
+            width: 8px; /* Larger size */
+            height: 8px; /* Larger size */
+            box-shadow: 0 0 20px rgba(255, 255, 255, 1),
+                        0 0 40px rgba(255, 255, 255, 1),
+                        0 0 60px rgba(255, 255, 255, 1),
+                        0 0 80px rgba(255, 255, 255, 1);
+        }
+        @keyframes twinkling {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        @keyframes shooting {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(100vw);
+                opacity: 0;
+            }
+        }
+        @keyframes trail {
+            0% {
+                transform: translateX(0) translateY(0) rotate(45deg);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateX(100vw) translateY(100vh) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        #vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            background: radial-gradient(circle at 50% 50%, transparent 40vw, rgba(0, 0, 0, 0.8) 60vw);
+            transition: background 0.1s ease-out;
+        }
+
+        html.lenis, html.lenis body {
+            height: auto;
+        }
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+        .lenis.lenis-smooth iframe {
+            pointer-events: none;
+        }
+
+        /* Glowing particles */
+        .glowing-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1; /* Ensure particles are behind other content but above stars */
+            overflow: hidden;
+        }
+        .glowing {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: colorChange 20s linear infinite; /* Slower animation */
+        }
+        .glowing span {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #fff; /* Changed to white */
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 1),
+                        0 0 40px rgba(255, 255, 255, 1),
+                        0 0 60px rgba(255, 255, 255, 1),
+                        0 0 80px rgba(255, 255, 255, 1),
+                        0 0 0 8px rgba(255, 255, 255, 0.1);
+            animation: animate 40s alternate infinite; /* Slower animation */
+            opacity: 0.5; /* Reduced opacity */
+            filter: blur(10px); /* Increased blur effect */
+        }
+        @keyframes animate {
+            0% {
+                transform: rotate(180deg);
+            }
+            50% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes animate-reverse {
+            0% {
+                transform: rotate(360deg);
+            }
+            50% {
+                transform: rotate(180deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+        @keyframes colorChange {
+            0% {
+                filter: hue-rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                filter: hue-rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="nebula"></div>
+    <div id="stars"></div>
+    <div id="shooting-stars"></div>
+    <div id="large-stars"></div>
+    <div id="vignette"></div>
+
+    <div class="glowing-container">
+        <div class="glowing" id="glowing-particles"></div>
+    </div>
+
+    <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+    <script>
+        // Initialize Lenis
+        const lenis = new Lenis({
+            duration: 1.2, // Smooth scrolling duration
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing function for smooth scrolling
+            smooth: true, // Enable smooth scrolling
+        });
+
+        // Use requestAnimationFrame to continuously update the scroll
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Add stars to the background
+        const starsContainer = document.getElementById('stars');
+        const shootingStarsContainer = document.getElementById('shooting-stars');
+        const largeStarsContainer = document.getElementById('large-stars');
+        const starCount = 100; // Number of stars
+        const shootingStarCount = 10; // Number of shooting stars
+        const largeStarCount = 20; // Number of large stars
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.top = `${Math.random() * 100}vh`;
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            starsContainer.appendChild(star);
+        }
+
+        for (let i = 0; i < shootingStarCount; i++) {
+            const shootingStar = document.createElement('div');
+            shootingStar.classList.add('shooting-star');
+            shootingStar.style.top = `${Math.random() * 100}vh`;
+            shootingStar.style.left = `${Math.random() * 100}vw`;
+            shootingStar.style.animationDelay = `${Math.random() * 5}s`;
+            shootingStarsContainer.appendChild(shootingStar);
+        }
+
+        for (let i = 0; i < largeStarCount; i++) {
+            const largeStar = document.createElement('div');
+            largeStar.classList.add('large-star');
+            largeStar.style.top = `${Math.random() * 100}vh`;
+            largeStar.style.left = `${Math.random() * 100}vw`;
+            largeStar.style.animationDelay = `${Math.random() * 5}s`;
+            largeStarsContainer.appendChild(largeStar);
+        }
+
+        let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+
+            const vignette = document.getElementById('vignette');
+            vignette.style.background = `radial-gradient(circle at ${targetX}px ${targetY}px, transparent 40vw, rgba(0, 0, 0, 0.8) 60vw)`;
+        });
+
+        function animateParallax() {
+            mouseX += (targetX - mouseX) * 0.1; // Adding delay to the movement
+            mouseY += (targetY - mouseY) * 0.1; // Adding delay to the movement
+
+            const nebula = document.getElementById('nebula');
+            const stars = document.querySelectorAll('.star');
+            const shootingStars = document.querySelectorAll('.shooting-star');
+            const largeStars = document.querySelectorAll('.large-star');
+
+            const nebulaSpeed = 0.05; // Reduced parallax effect for the nebula
+            nebula.style.transform = `translate(calc(-50% + ${mouseX * nebulaSpeed}px), calc(-50% + ${mouseY * nebulaSpeed}px))`;
+
+            stars.forEach(star => {
+                const speed = star.getBoundingClientRect().top / window.innerHeight;
+                const xPos = (mouseX * speed) / 10; // More drastic parallax effect
+                const yPos = (mouseY * speed) / 10; // More drastic parallax effect
+                star.style.transform = `translate(${xPos}px, ${yPos}px)`;
+            });
+
+            shootingStars.forEach(shootingStar => {
+                const speed = shootingStar.getBoundingClientRect().top / window.innerHeight;
+                const xPos = (mouseX * speed) / 10; // More drastic parallax effect
+                const yPos = (mouseY * speed) / 10; // More drastic parallax effect
+                shootingStar.style.transform = `translate(${xPos}px, ${yPos}px)`;
+            });
+
+            largeStars.forEach(largeStar => {
+                const speed = largeStar.getBoundingClientRect().top / window.innerHeight;
+                const xPos = (mouseX * speed) / 10; // More drastic parallax effect
+                const yPos = (mouseY * speed) / 10; // More drastic parallax effect
+                largeStar.style.transform = `translate(${xPos}px, ${yPos}px)`;
+            });
+
+            requestAnimationFrame(animateParallax);
+        }
+
+        animateParallax();
+
+        // Add glowing particles to the background
+        const glowingParticlesContainer = document.getElementById('glowing-particles');
+        const particleCount = 30; // Reduced number of particles
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('span');
+            particle.style.top = `${Math.random() * 100}vh`;
+            particle.style.left = `${Math.random() * 100}vw`;
+            glowingParticlesContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>
